@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Team Selector</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f4f4f9;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+    .container {
+      background: #ffffff;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      max-width: 600px;
+      width: 90%;
+      padding: 20px;
+      text-align: center;
+    }
+    h1 {
+      font-size: 24px;
+      margin-bottom: 20px;
+      color: #333;
+    }
+    button {
+      background-color: #007BFF;
+      color: white;
+      padding: 12px 25px;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    .teams {
+      margin-top: 20px;
+      text-align: left;
+    }
+    .team {
+      background: #f9f9f9;
+      margin: 10px 0;
+      padding: 15px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
+    .team strong {
+      color: #333;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Team Selector</h1>
+    <button onclick="selectTeams()">Select Teams</button>
+    <div id="teams" class="teams"></div>
+  </div>
+
+  <script>
+    function selectTeams() {
+      const rollNumbers = Array.from({ length: 58 }, (_, i) => i + 1);
+      const teamCount = 12;
+      const teams = [];
+
+      const teamSize = Math.floor(rollNumbers.length / teamCount);
+      const extras = rollNumbers.length % teamCount;
+
+      // Shuffle roll numbers
+      for (let i = rollNumbers.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [rollNumbers[i], rollNumbers[j]] = [rollNumbers[j], rollNumbers[i]];
+      }
+
+      // Divide into teams
+      let index = 0;
+      for (let i = 0; i < teamCount; i++) {
+        const currentTeamSize = teamSize + (i < extras ? 1 : 0);
+        teams.push(rollNumbers.slice(index, index + currentTeamSize));
+        index += currentTeamSize;
+      }
+
+      // Display teams
+      const teamsDiv = document.getElementById('teams');
+      teamsDiv.innerHTML = '';
+      teams.forEach((team, index) => {
+        const teamDiv = document.createElement('div');
+        teamDiv.className = 'team';
+        teamDiv.innerHTML = `<strong>Team ${index + 1}:</strong> ${team.join(', ')}`;
+        teamsDiv.appendChild(teamDiv);
+      });
+    }
+  </script>
+</body>
+</html>
